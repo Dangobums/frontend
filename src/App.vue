@@ -1,26 +1,33 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Die in hell" id=1 />
+  <nav>
+    <router-link to="/">Home</router-link> |
+    <router-link to="/data">About</router-link>
+  </nav>
+  <router-view/>
 </template>
-
-<script>
-import HelloWorld from './components/HelloWorld.vue'
-
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
-</script>
 
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  /*text-align: center;*/
+  text-align: center;
+  color: #263a4b;
+}
+
+nav {
+  padding: 30px;
+}
+
+nav a {
+  font-weight: bold;
   color: #2c3e50;
-  margin-top: 60px;
+  text-decoration: none;
+  padding: 10px;
+  border-radius: 10px;
+  transition: 0.3s ease all;
+}
+
+nav a.router-link-exact-active {
+  color: #42b983;
+  background-color: red;
 }
 </style>

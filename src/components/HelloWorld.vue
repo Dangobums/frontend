@@ -1,63 +1,82 @@
-
-
 <template>
-  <div class="hello">
+  <div class="home">
     <h1>{{ msg }} {{ id }}</h1>
-    <form action="http://localhost:7070/api/import" method="post" encType="multipart/form-data">
-      <input type="file" name="file" />
-      <input type="submit" value="Import" />
-    </form>
-    <button @click="list()">Hello</button>
-    <pre>{{ students }}</pre>
+    <DropZone @drop.prevent="drop"  @change="selectedFile"/>
+    <span class="fileInfo"> File: {{ dropZoneFile.name }}</span>
+    <button class="summitButton" v-on:click="submitFile()">Submit</button>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import {ref} from "vue";
+import DropZone from "@/components/DropZone";
+
 export default {
   name: 'HelloWorld',
+  components: {
+    DropZone,
+  },
   props: {
     msg: String,
     id: String
   },
-  data() {
-    return {
-      students: []
+  setup() {
+    let dropZoneFile = ref("");
+    const drop = (e) => {
+      dropZoneFile.value = e.dataTransfer.files[0];
     }
-
+    const selectedFile = (e) => {
+      dropZoneFile.value = e.target.files[0];
+    }
+    return {
+      dropZoneFile,
+      selectedFile,
+      drop,
+    }
   },
   methods: {
-    list() {
-      axios.get("http://localhost:7070/api/studentslist")
-          .then(res => {
-            this.students = res.data;
-            console.log(res.data);
-          })
-    }
+    submitFile() {
+      let formData = new FormData();
+      if (!this.dropZoneFile) {
+        console.log("Please submit a file");
+      } else {
+        formData.append('file', this.dropZoneFile);
+        axios.post("/api/import", formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }).then(function (res) {
+          console.log(res);
+          console.log("Success");
+        }).catch(function () {
+          console.log('FAILURE!!');
+        });
+      }
 
+    },
   },
 
-  // mounted() {
-  //   fetch('/api/studentslist').then((res) => {console.log(res.text())}).then((data) => console.log(data));
-  // }
 }
 
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h3 {
-  margin: 40px 0 0;
+<style scoped lang="scss" >
+@import "@/assets/variables.scss";
+@import "@/assets/_shared.scss";
+.home {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: #f1f1f1;
+  h1 {
+    margin-top: 32px;
+  }
+  .fileInfo {
+    margin-top: 32px;
+  }
 }
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+
 </style>
