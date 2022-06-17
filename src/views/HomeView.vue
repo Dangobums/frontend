@@ -1,17 +1,24 @@
 <template>
   <div class="home">
-    <HelloWorld msg="Drag or drop your excel file here"/>
+    <MainComponent :msg="msg"/>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import MainComponent from '@/components/MainComponent'
+import {ref} from "vue";
 
 export default {
   name: 'HomeView',
   components: {
-    HelloWorld
-  }
+    MainComponent,
+  },
+  data() {
+    const msg = ref("Name");
+    return {
+      msg,
+    }
+  },
 }
 </script>

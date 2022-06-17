@@ -39,18 +39,18 @@ export default {
     }
   },
   methods: {
-    openNotificationWithIcon(type) {
+    openNotificationWithIcon(type, message) {
       notification[type]({
-        message: 'Notification Title',
-        description: 'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+        message: message,
+        description: 'Please try again',
         duration: 2,
       });
     },
     submitFile() {
       let formData = new FormData();
       if (!this.dropZoneFile) {
-        this.openNotificationWithIcon('error');
-        console.log("Please submit a file");
+        this.openNotificationWithIcon('error', "Please submit a file");
+        console.log();
       } else {
         formData.append('file', this.dropZoneFile);
         axios.post("/api/import", formData, {
@@ -60,8 +60,13 @@ export default {
         }).then(function (res) {
           console.log(res);
           console.log("Success");
+          notification["success"]({
+            message: "Success",
+            description: 'Please check the data page',
+            duration: 2,
+          });
         }).catch(function () {
-          this.openNotificationWithIcon('error');
+          this.openNotificationWithIcon('error', 'Fail');
           console.log('FAILURE!!');
         });
       }
