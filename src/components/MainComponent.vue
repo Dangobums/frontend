@@ -3,7 +3,9 @@
     <h1>{{ msg }} {{ id }}</h1>
     <DropZone @drop.prevent="drop"  @change="selectedFile"/>
     <span class="fileInfo"> File: {{ dropZoneFile.name }}</span>
-    <button class="summitButton" v-on:click="submitFile()">Submit</button>
+    <a-button type="primary" @click="submitFile" class="submit" size="large">
+      Submit
+    </a-button>
   </div>
 </template>
 
@@ -57,9 +59,9 @@ export default {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
-        }).then(function (res) {
-          console.log(res);
-          console.log("Success");
+        }).then(function () {
+          // console.log(res);
+          // console.log("Success");
           notification["success"]({
             message: "Success",
             description: 'Please check the data page',
@@ -94,6 +96,9 @@ export default {
   .fileInfo {
     margin-top: 32px;
   }
+}
+.submit {
+  background-color: #069255;
 }
 
 </style>

@@ -11,8 +11,6 @@
 /* eslint-disable */
 import {ref} from "vue";
 
-import { message } from 'ant-design-vue';
-
 export default {
   name: "DropZone",
   setup() {
@@ -38,6 +36,7 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
   row-gap: 16px;
   border: 2px dashed $ghtk_color;
   background-color: #f1eded;

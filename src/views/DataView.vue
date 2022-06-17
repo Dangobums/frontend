@@ -1,9 +1,9 @@
 <template>
-    <Table/>
+    <DataTable/>
 </template>
 
 <script setup>
-import Table from "@/components/Table";
+import DataTable from "@/components/Table";
 </script>
 <style lang="scss">
 .data-page {

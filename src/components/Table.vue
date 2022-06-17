@@ -6,7 +6,6 @@
           <div class="input-field">
             <a-input v-model:value="studentName" size="large" @press-enter="onSearch"/>
           </div>
-
         </div>
         <div class="student-input-id">
           <div class="input-name">Student ID</div>
@@ -41,6 +40,7 @@
 <script>
 import axios from "axios";
 import {ref} from "vue";
+import {notification} from "ant-design-vue";
 
 const columns = [
       {
@@ -218,6 +218,7 @@ export default {
       columns,
       studentName,
       studentId,
+
     }
   },
   methods: {
@@ -226,8 +227,6 @@ export default {
       const response = await axios.get("/api/studentslist");
       this.students = response.data;
       this.loading = false;
-      // this.studentId = '';
-      // console.log(response.data);
     },
     async load() {
       try {
@@ -237,7 +236,12 @@ export default {
       }
       catch(error){
         if (error.message.includes("500")) {
-          console.log("Error from server");
+          notification["error"]({
+            message: "Error",
+            description: 'Server not responding',
+            duration: 2,
+          });
+          this.loading = false;
           console.error(error.message);
         }
 

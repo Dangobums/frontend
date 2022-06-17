@@ -3,12 +3,14 @@
     <router-link to="/">Home</router-link> |
     <router-link to="/data">Data</router-link>
   </nav>
+  <h1>Tra cứu tuyển sinh</h1>
+  <img src="https://giaohangtietkiem.vn/wp-content/uploads/2015/10/logo.png" alt="logo">
   <router-view/>
   <FooterComponent></FooterComponent>
 </template>
 
 <style>
-#app {
+#root {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   text-align: center;
   color: #263a4b;
@@ -29,7 +31,7 @@ nav a {
 
 nav a.router-link-exact-active {
   color: black;
-  background-color: red;
+  background-color: #069255;
 }
 </style>
 <script>
