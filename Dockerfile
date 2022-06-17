@@ -1,14 +1,11 @@
-FROM node:16 as build-container
-COPY ./ /app/
-WORKDIR /app/
+FROM node:latest as build-stage
+WORKDIR /app
+COPY package*.json ./
 RUN npm install
-ENV REACT_APP_API_HOST=/api
+COPY ./ .
 RUN npm run build
 
-FROM alpine:latest
-RUN apk add ca-certificates nginx
-EXPOSE 3000
-RUN rm /etc/nginx/http.d/default.conf
-COPY ./configs/oner-frontend /etc/nginx/http.d/oner-frontend.conf
-COPY --from=build-container /app/build /app/public
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
+FROM nginx as production-stage
+RUN mkdir /app
+COPY --from=build-stage /app/dist /app
+COPY nginx.conf /etc/nginx/nginx.conf
