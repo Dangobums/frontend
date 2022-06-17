@@ -8,7 +8,10 @@
 </template>
 
 <script>
+/* eslint-disable */
 import {ref} from "vue";
+
+import { message } from 'ant-design-vue';
 
 export default {
   name: "DropZone",
@@ -24,8 +27,6 @@ export default {
   }
 }
 
-
-
 </script>
 
 <style lang="scss">
@@ -39,7 +40,7 @@ export default {
   align-items: center;
   row-gap: 16px;
   border: 2px dashed $ghtk_color;
-  background-color: #fff;
+  background-color: #f1eded;
   transition: .3s ease all;
 }
 .active-dropzone {

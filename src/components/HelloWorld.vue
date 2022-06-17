@@ -11,6 +11,7 @@
 import axios from "axios";
 import {ref} from "vue";
 import DropZone from "@/components/DropZone";
+import {notification} from "ant-design-vue";
 
 export default {
   name: 'HelloWorld',
@@ -29,6 +30,8 @@ export default {
     const selectedFile = (e) => {
       dropZoneFile.value = e.target.files[0];
     }
+
+
     return {
       dropZoneFile,
       selectedFile,
@@ -36,9 +39,17 @@ export default {
     }
   },
   methods: {
+    openNotificationWithIcon(type) {
+      notification[type]({
+        message: 'Notification Title',
+        description: 'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+        duration: 2,
+      });
+    },
     submitFile() {
       let formData = new FormData();
       if (!this.dropZoneFile) {
+        this.openNotificationWithIcon('error');
         console.log("Please submit a file");
       } else {
         formData.append('file', this.dropZoneFile);
@@ -50,6 +61,7 @@ export default {
           console.log(res);
           console.log("Success");
         }).catch(function () {
+          this.openNotificationWithIcon('error');
           console.log('FAILURE!!');
         });
       }

@@ -1,14 +1,42 @@
 <template>
-  <a-button type="primary" @click="list()">
-    Reload
-  </a-button>
-  <a-table :columns="columns" :data-source="students" :scroll="{ y: 600, x: 2500 }" bordered :loading="loading">
-    <template #bodyCell="{ column, text }">
-      <template v-if="column.dataIndex === 'studentName'">
-        <a>{{ text }}</a>
+  <div class="table-main">
+      <div class="student-input_field">
+        <div class="student-input-name">
+          <div class="input-name">Student Name</div>
+          <div class="input-field">
+            <a-input v-model:value="studentName" size="large" @press-enter="onSearch"/>
+          </div>
+
+        </div>
+        <div class="student-input-id">
+          <div class="input-name">Student ID</div>
+          <div class="input-field"><a-input v-model:value="studentId" size="large"  @press-enter="onSearch"/></div>
+
+        </div>
+      </div>
+      <div class="button-group">
+        <div class="button-group_submit">
+          <a-button type="primary" @click="onSearch" class="submit">
+            Submit
+          </a-button>
+        </div>
+        <div class="button-group_reload">
+          <a-button type="primary" @click="list()">
+            Reload
+          </a-button>
+        </div>
+
+      </div>
+
+    <a-table :columns="columns" :data-source="students" :scroll="{ y: 600, x: 2500 }" bordered :loading="loading" >
+      <template #bodyCell="{ column, text }">
+        <template v-if="column.dataIndex === 'studentName'">
+          <span>{{ text }}</span>
+        </template>
       </template>
-    </template>
-  </a-table>
+    </a-table>
+  </div>
+
 </template>
 <script>
 import axios from "axios";
@@ -21,6 +49,7 @@ const columns = [
         key: 'id',
         width: '60px',
         fixed: 'left',
+        align: 'center'
       },
       {
         title: 'Họ và tên',
@@ -85,6 +114,7 @@ const columns = [
         dataIndex: 'gender',
         key: 'gender',
         width: '90px',
+        align: 'center',
       },
       {
         title: 'Nơi sinh',
@@ -109,6 +139,7 @@ const columns = [
         title: 'Điện thoại liên hệ',
         dataIndex: 'phoneNumber',
         key: 'phoneNumber',
+        align: 'center',
       },
       {
         title: 'Điểm sơ tuyển',
@@ -170,15 +201,23 @@ const columns = [
         align: 'center',
       },
     ];
+
 export default {
   name: 'DataTable',
+  props: {
+
+  },
   data() {
     const students = ref(null);
     const loading = ref(true);
+    const studentName = ref('');
+    const studentId = ref('');
     return {
       students,
       loading,
       columns,
+      studentName,
+      studentId,
     }
   },
   methods: {
@@ -187,13 +226,31 @@ export default {
       const response = await axios.get("/api/studentslist");
       this.students = response.data;
       this.loading = false;
-      console.log(response.data);
+      // this.studentId = '';
+      // console.log(response.data);
     },
     async load() {
-      const response = await axios.get("/api/studentslist");
+      try {
+        const response = await axios.get("/api/studentslist");
+        this.students = response.data;
+        this.loading = false;
+      }
+      catch(error){
+        if (error.message.includes("500")) {
+          console.log("Error from server");
+          console.error(error.message);
+        }
+
+      }
+    },
+    async onSearch() {
+      this.loading = true;
+      // console.log(this.studentId);
+      const response = await axios.get(`http://localhost:7070/api/search?id=${this.studentId}&name=${this.studentName}`);
       this.students = response.data;
       this.loading = false;
-    }
+      // console.log(response.data);
+    },
   },
   mounted() {
     this.load();
@@ -204,7 +261,58 @@ export default {
 <style lang="scss">
 @use"@/assets/variables.scss";
 .ant-table-thead > tr >th{
-  color: #fff;
+  color: #3b3b35;
   background-color: #069255 !important;
+  border-color: #069255;
 }
+.table-main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.student-input-name {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .input-name {
+    margin: 16px;
+  }
+  .input-field {
+    margin: 12px;
+    width: 80%;
+  }
+}
+.student-input-id{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .input-name {
+    justify-self: flex-start;
+    margin: 16px;
+    padding: 11px;
+  }
+  .input-field {
+    margin: 12px;
+    width: 80%;
+  }
+}
+.button-group {
+  display: flex;
+  flex-direction: row;
+  width: 50%;
+  justify-content: center;
+  align-items: center;
+  margin: 12px;
+  .button-group_submit {
+    margin-right: 12px;
+  }
+  .button-group_reload {
+    margin-left: 12px;
+  }
+}
+.ant-table-wrapper {
+  min-width: 50%;
+}
+
 </style>

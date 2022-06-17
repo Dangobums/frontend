@@ -4,6 +4,7 @@
     <router-link to="/data">About</router-link>
   </nav>
   <router-view/>
+  <FooterComponent></FooterComponent>
 </template>
 
 <style>
@@ -27,7 +28,13 @@ nav a {
 }
 
 nav a.router-link-exact-active {
-  color: #42b983;
+  color: black;
   background-color: red;
 }
 </style>
+<script>
+import FooterComponent from "@/components/Footer";
+export default {
+  components: {FooterComponent,}
+}
+</script>
